@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
@@ -40,4 +41,42 @@ int* GaussianBlur(unsigned char* grey_matrix, int img_h, int img_w){
     }
 
     return blur_matrix;
+}
+
+int main() {
+
+    FILE *fp = fopen("input.bmp", "rb");
+    if (fp == NULL) {
+        printf("Cannot open image file\n");
+        return 1;
+    }
+
+    unsigned char header[54];
+
+    fread(header, sizeof(unsigned char), 54, fp);
+
+    int width = *(int*)&header[18];
+    int height = *(int*)&header[22];
+
+    printf("Width: %d\n", width);
+    printf("Height: %d\n", height);
+
+    int size = 3 * width * height;
+
+    unsigned char *data = (unsigned char*) malloc(size);
+
+    fread(data, sizeof(unsigned char), size, fp);
+
+    fclose(fp);
+
+    unsigned char *gray = (unsigned char*) malloc(width * height);
+    
+    for(int i = 0, j = 0; i < size; i += 3, j++) {
+
+        unsigned char B = data[i];
+        unsigned char G = data[i+1];
+        unsigned char R = data[i+2];
+
+        gray[j] = (R + G + B) / 3;
+    }
 }
