@@ -41,3 +41,47 @@ int* GaussianBlur(unsigned char* grey_matrix, int img_h, int img_w){
 
     return blur_matrix;
 }
+
+int * Sobble(int * blur_matrix, int img_h, int img_w){
+	int img_size = img_h*img_w;
+	int * sobble_matrix = (void*)malloc(sizeof(int)*img_size);
+	double * gy = (void*)malloc(sizeof(double)*img_size);
+	double * gx = (void*)malloc(sizeof(double)*img_size);
+	double * orient = (void*)malloc(sizeof(double)*img_size);
+
+	float v = 1.0; 
+	float ker_x[3][3] = {{-1,0,1},
+					  {-2,0,2},
+				   	  {-1,0,1}};
+	float ker_y[3][3] = {{-1,-2,-1},
+					  {0,0,0},
+				   	  {1,2,1}};
+
+	for(int i = 0;i<img_size;i++){
+		float sx = 0.1, sy = 0.1;
+		//DETECTS THAT PIXEL IS NOT ON BORDERS
+		if(i>img_w && i < (img_size-img_w) && (i%img_w)%(img_w-1)){
+			for(int j = 0; j<3; j++){
+				for(int k = 0; k<3;k++){
+					int idx = i + img_w*(j-1) + (k-1);
+					sx+= (float)blur_matrix[idx]*ker_x[j][k];
+					sy+= (float)blur_matrix[idx]*ker_y[j][k];
+				}
+			}
+
+		}
+		
+		gx[i] = sx;
+		gy[i] = sy;
+		
+		sobble_matrix[i] = pow((sx*sx+sy*sy), 0.5);
+		orient[i] = atan(gx[i]/gy[i]);
+		
+
+	//APPLYING  CANNY OPERATOR AND HYSTERESIS THRESHOLDING
+		
+	}
+	int * canny_matrix = Canny(sobble_matrix, orient, img_h, img_w);
+	int * hys_matrix = Hys_Thres(canny_matrix,100,50, img_h,img_w );
+	return hys_matrix;
+}
