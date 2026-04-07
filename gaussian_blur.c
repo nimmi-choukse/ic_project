@@ -45,7 +45,10 @@ int* GaussianBlur(unsigned char* grey_matrix, int img_h, int img_w){
 
 int main() {
 
-    FILE *fp = fopen("input.bmp", "rb");
+    char filename[100];
+    printf ("Enter file name:");
+    scanf ("%s", filename);
+    FILE *fp = fopen(filename, "rb");
     if (fp == NULL) {
         printf("Cannot open image file\n");
         return 1;
