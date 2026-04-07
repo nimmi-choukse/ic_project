@@ -1,6 +1,8 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
+#define pi 3.14159265
+
 
 int* GaussianBlur(unsigned char* grey_matrix, int img_h, int img_w){
     int img_size = img_h * img_w;
@@ -42,6 +44,7 @@ int* GaussianBlur(unsigned char* grey_matrix, int img_h, int img_w){
     return blur_matrix;
 }
 
+<<<<<<< HEAD
 int * Sobble(int * blur_matrix, int img_h, int img_w){
 	int img_size = img_h*img_w;
 	int * sobble_matrix = (void*)malloc(sizeof(int)*img_size);
@@ -85,25 +88,84 @@ int * Sobble(int * blur_matrix, int img_h, int img_w){
 	int * hys_matrix = Hys_Thres(canny_matrix,100,50, img_h,img_w );
 	return hys_matrix;
 }
-    // --- OUTPUT LOGIC ---
-int* Canny(int* sobble_matrix, double* orient, int img_h, int img_w) { 
-    return sobble_matrix; // Temporary: just passes the data through so it doesn't crash
-}
+int * Canny(int *sobble_matrix, double * orient, int img_h, int img_w){
+	int img_size = img_h*img_w;
+	int* canny_matrix = (void*)malloc(sizeof(int)*img_size);
+	for(int i = 0;i<img_size;i++){
+		if(sobble_matrix[i]>0){
+			canny_matrix[i] = 0;
+			if(i>img_w && i < (img_size-img_w) && (i%img_w)%(img_w-1)){
+				if(orient[i]>-1*pi/6 && orient[i]< pi/6){
+					int id1 = i-img_w;
+					int id2 =  i+img_w;
+					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
+						canny_matrix[i] = sobble_matrix[i];
+					}
+				}
+				else if(orient[i]>-1*pi/3 && orient[i]< -1*pi/6){
+					int id1 = i-img_w+1;
+					int id2 =  i+img_w-1;
+					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
+						canny_matrix[i] = sobble_matrix[i];
+					}
+				}
+				else if(orient[i]<pi/3 && orient[i]>pi/6){
+					int id1 = i-img_w-1;
+					int id2 =  i+img_w+1;
+					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
+						canny_matrix[i] = sobble_matrix[i];
+					}
+				}
+				else{
+					int id1 = i-1;
+					int id2 =  i+1;
+					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
+						canny_matrix[i] = sobble_matrix[i];
+					}
+				}
+			}
+		}
+	}
+	return canny_matrix;
+=======
+int main() {
 
-int* Hys_Thres(int* canny_matrix, int h_thres, int l_thres, int img_h, int img_w) {
-    return canny_matrix; // Temporary: just passes the data through
-}
-
-// The actual output part: Saves the file
-void Save_Result(const char* name, int* mat, int img_h, int img_w) {
-    FILE *f = fopen(name, "wb");
-    unsigned char head[54] = {0x42,0x4D,54,0,0,0,0,0,0,0,54,0,0,0,40,0,0,0};
-    *(int*)&head[18] = img_w; *(int*)&head[22] = img_h; head[28] = 24;
-    fwrite(head, 1, 54, f);
-    for (int i = 0; i < img_h * img_w; i++) {
-        unsigned char p = (unsigned char)mat[i];
-        fputc(p, f); fputc(p, f); fputc(p, f);
+    char filename[100];
+    printf ("Enter file name:");
+    scanf ("%s", filename);
+    FILE *fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        printf("Cannot open image file\n");
+        return 1;
     }
-    fclose(f);
-    printf("\nSaved to %s", name);
+
+    unsigned char header[54];
+
+    fread(header, sizeof(unsigned char), 54, fp);
+
+    int width = *(int*)&header[18];
+    int height = *(int*)&header[22];
+
+    printf("Width: %d\n", width);
+    printf("Height: %d\n", height);
+
+    int size = 3 * width * height;
+
+    unsigned char *data = (unsigned char*) malloc(size);
+
+    fread(data, sizeof(unsigned char), size, fp);
+
+    fclose(fp);
+
+    unsigned char *gray = (unsigned char*) malloc(width * height);
+    
+    for(int i = 0, j = 0; i < size; i += 3, j++) {
+
+        unsigned char B = data[i];
+        unsigned char G = data[i+1];
+        unsigned char R = data[i+2];
+
+        gray[j] = (R + G + B) / 3;
+    }
+>>>>>>> branchRiddhi
 }
