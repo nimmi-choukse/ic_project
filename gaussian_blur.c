@@ -153,3 +153,11 @@ int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w
 		}
 		return hys_matrix;
 	}
+	void Greyscale(unsigned char * img_data, unsigned char * grey_matrix, int img_size){
+	for(int i  = 0; i <img_size;i++){
+		unsigned char I = __max(img_data[3*i],img_data[3*i+1]);
+		I = __max(I, img_data[3*i+2]);
+		grey_matrix[i] = I;
+	}
+
+}
