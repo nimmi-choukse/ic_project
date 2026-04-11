@@ -126,3 +126,30 @@ int * Canny(int *sobble_matrix, double * orient, int img_h, int img_w){
 	}
 	return canny_matrix;
 }
+
+int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w){
+	int img_size = img_h*img_w;
+	int* hys_matrix = (void*)malloc(sizeof(int)*img_size);
+	for(int i = 0; i < img_size; i++){
+		if(canny_matrix[i]>h_thres){
+			hys_matrix[i] = canny_matrix[i];
+		}
+		else if(canny_matrix[i]<l_thres){
+			hys_matrix[i] = 0;
+		}
+		else{
+			hys_matrix[i] = 0;
+			for(int j = 0; j<3; j++){
+				for(int k = 0; k<3;k++){
+					int idx = i + img_w*(j-1) + (k-1);
+					if(canny_matrix[idx]>h_thres){
+						hys_matrix[i] = canny_matrix[i];
+					}
+				}
+			}
+
+		}
+
+		}
+		return hys_matrix;
+	}
