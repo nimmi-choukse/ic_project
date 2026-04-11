@@ -156,7 +156,47 @@ int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
     }
     return canny_matrix;
 }
-    int main()
+   
+
+int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w){
+	int img_size = img_h*img_w;
+	int* hys_matrix = (void*)malloc(sizeof(int)*img_size);
+	for(int i = 0; i < img_size; i++){
+		if(canny_matrix[i]>h_thres){
+			hys_matrix[i] = canny_matrix[i];
+		}
+		else if(canny_matrix[i]<l_thres){
+			hys_matrix[i] = 0;
+		}
+		else{
+			hys_matrix[i] = 0;
+			for(int j = 0; j<3; j++){
+				for(int k = 0; k<3;k++){
+					int idx = i + img_w*(j-1) + (k-1);
+					if(canny_matrix[idx]>h_thres){
+						hys_matrix[i] = canny_matrix[i];
+					}
+				}
+			}
+
+		}
+
+		}
+		return hys_matrix;
+	}
+
+
+
+	void Greyscale(unsigned char * img_data, unsigned char * grey_matrix, int img_size){
+	for(int i  = 0; i <img_size;i++){
+		unsigned char I = __max(img_data[3*i],img_data[3*i+1]);
+		I = __max(I, img_data[3*i+2]);
+		grey_matrix[i] = I;
+	}
+
+}
+
+ int main()
     {
 
         char filename[100];
@@ -230,43 +270,5 @@ int *final = Sobble(blur, height, width);
     fclose(out);
     printf("output.bmp generated successfully\n");
     return 0;
-}
-
-int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w){
-	int img_size = img_h*img_w;
-	int* hys_matrix = (void*)malloc(sizeof(int)*img_size);
-	for(int i = 0; i < img_size; i++){
-		if(canny_matrix[i]>h_thres){
-			hys_matrix[i] = canny_matrix[i];
-		}
-		else if(canny_matrix[i]<l_thres){
-			hys_matrix[i] = 0;
-		}
-		else{
-			hys_matrix[i] = 0;
-			for(int j = 0; j<3; j++){
-				for(int k = 0; k<3;k++){
-					int idx = i + img_w*(j-1) + (k-1);
-					if(canny_matrix[idx]>h_thres){
-						hys_matrix[i] = canny_matrix[i];
-					}
-				}
-			}
-
-		}
-
-		}
-		return hys_matrix;
-	}
-
-
-
-	void Greyscale(unsigned char * img_data, unsigned char * grey_matrix, int img_size){
-	for(int i  = 0; i <img_size;i++){
-		unsigned char I = __max(img_data[3*i],img_data[3*i+1]);
-		I = __max(I, img_data[3*i+2]);
-		grey_matrix[i] = I;
-	}
-
 }
 
