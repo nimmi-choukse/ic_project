@@ -5,6 +5,12 @@
 #include <string.h>
 #define pi 3.14159265
 
+void Greyscale(unsigned char *img_matrix, unsigned char * grey_matrix, int img_size);
+int * GaussianBlur(unsigned char *grey_matrix, int img_h, int img_w);
+int* Sobble(int * blur_matrix, int img_h, int img_w);
+int * Canny(int *sobble_matrix, double * orient, int img_h, int img_w);
+int * Hys_Thres(int *cany_matrix, int h_thres, int l_thres, int img_h, int img_w);
+
 int *GaussianBlur(unsigned char *grey_matrix, int img_h, int img_w)
 {
     int img_size = img_h * img_w;
