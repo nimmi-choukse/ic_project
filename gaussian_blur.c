@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #define pi 3.14159265
+#define max(a, b) ((a) > (b) ? (a) : (b))
 
 void Greyscale(unsigned char *img_matrix, unsigned char * grey_matrix, int img_size);
 int * GaussianBlur(unsigned char *grey_matrix, int img_h, int img_w);
@@ -119,7 +120,7 @@ int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
                 {
                     int id1 = i - img_w;
                     int id2 = i + img_w;
-                    if (sobble_matrix[i] > __max(sobble_matrix[id1], sobble_matrix[id2]))
+                    if (sobble_matrix[i] > max(sobble_matrix[id1], sobble_matrix[id2]))
                     {
                         canny_matrix[i] = sobble_matrix[i];
                     }
@@ -128,7 +129,7 @@ int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
                 {
                     int id1 = i - img_w + 1;
                     int id2 = i + img_w - 1;
-                    if (sobble_matrix[i] > __max(sobble_matrix[id1], sobble_matrix[id2]))
+                    if (sobble_matrix[i] > max(sobble_matrix[id1], sobble_matrix[id2]))
                     {
                         canny_matrix[i] = sobble_matrix[i];
                     }
@@ -137,7 +138,7 @@ int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
                 {
                     int id1 = i - img_w - 1;
                     int id2 = i + img_w + 1;
-                    if (sobble_matrix[i] > __max(sobble_matrix[id1], sobble_matrix[id2]))
+                    if (sobble_matrix[i] > max(sobble_matrix[id1], sobble_matrix[id2]))
                     {
                         canny_matrix[i] = sobble_matrix[i];
                     }
@@ -146,7 +147,7 @@ int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
                 {
                     int id1 = i - 1;
                     int id2 = i + 1;
-                    if (sobble_matrix[i] > __max(sobble_matrix[id1], sobble_matrix[id2]))
+                    if (sobble_matrix[i] > max(sobble_matrix[id1], sobble_matrix[id2]))
                     {
                         canny_matrix[i] = sobble_matrix[i];
                     }
@@ -189,8 +190,8 @@ int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w
 
 	void Greyscale(unsigned char * img_data, unsigned char * grey_matrix, int img_size){
 	for(int i  = 0; i <img_size;i++){
-		unsigned char I = __max(img_data[3*i],img_data[3*i+1]);
-		I = __max(I, img_data[3*i+2]);
+		unsigned char I = max(img_data[3*i],img_data[3*i+1]);
+		I = max(I, img_data[3*i+2]);
 		grey_matrix[i] = I;
 	}
 
