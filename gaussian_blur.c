@@ -224,46 +224,6 @@ int *final = Sobble(blur, height, width);
     return 0;
 }
 =======
-int * Canny(int *sobble_matrix, double * orient, int img_h, int img_w){
-	int img_size = img_h*img_w;
-	int* canny_matrix = (void*)malloc(sizeof(int)*img_size);
-	for(int i = 0;i<img_size;i++){
-		if(sobble_matrix[i]>0){
-			canny_matrix[i] = 0;
-			if(i>img_w && i < (img_size-img_w) && (i%img_w)%(img_w-1)){
-				if(orient[i]>-1*pi/6 && orient[i]< pi/6){
-					int id1 = i-img_w;
-					int id2 =  i+img_w;
-					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
-						canny_matrix[i] = sobble_matrix[i];
-					}
-				}
-				else if(orient[i]>-1*pi/3 && orient[i]< -1*pi/6){
-					int id1 = i-img_w+1;
-					int id2 =  i+img_w-1;
-					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
-						canny_matrix[i] = sobble_matrix[i];
-					}
-				}
-				else if(orient[i]<pi/3 && orient[i]>pi/6){
-					int id1 = i-img_w-1;
-					int id2 =  i+img_w+1;
-					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
-						canny_matrix[i] = sobble_matrix[i];
-					}
-				}
-				else{
-					int id1 = i-1;
-					int id2 =  i+1;
-					if(sobble_matrix[i]>__max(sobble_matrix[id1],sobble_matrix[id2])){
-						canny_matrix[i] = sobble_matrix[i];
-					}
-				}
-			}
-		}
-	}
-	return canny_matrix;
-}
 
 int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w){
 	int img_size = img_h*img_w;
