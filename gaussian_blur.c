@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#include <string.h>
 #define pi 3.14159265
 
 int *GaussianBlur(unsigned char *grey_matrix, int img_h, int img_w)
