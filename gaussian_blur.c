@@ -95,7 +95,7 @@ int *Sobble(int *blur_matrix, int img_h, int img_w)
     int *hys_matrix = Hys_Thres(canny_matrix, 100, 50, img_h, img_w);
     return hys_matrix;
 }
-<<<<<<< HEAD
+
 int *Canny(int *sobble_matrix, double *orient, int img_h, int img_w)
 {
     int img_size = img_h * img_w;
@@ -223,7 +223,6 @@ int *final = Sobble(blur, height, width);
     printf("output.bmp generated successfully\n");
     return 0;
 }
-=======
 
 int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w){
 	int img_size = img_h*img_w;
@@ -251,4 +250,4 @@ int* Hys_Thres(int *canny_matrix, int h_thres, int l_thres, int img_h, int img_w
 		}
 		return hys_matrix;
 	}
->>>>>>> branchPradhi
+
